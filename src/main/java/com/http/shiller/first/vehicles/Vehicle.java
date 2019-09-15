@@ -30,4 +30,8 @@ public abstract class Vehicle implements Features {
     public static Vehicle getObjectByType(VehicleType type){
         return type.getInfo().getClassCar();
     }
+
+    public String toString() {
+        return "Vehicle {producedYear: " + this.producedYear + "; miles: " + this.miles + "; basePrice: " + this.basePrice + ";}";
+    }
 }
