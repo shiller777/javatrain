@@ -4,8 +4,8 @@ import com.http.shiller.first.vehicles.Vehicle;
 
 public class Schooter extends Vehicle {
 
-    public Schooter(int producedYear, VehicleType type) {
-        super(producedYear, type);
+    public Schooter(int producedYear) {
+        super(producedYear, VehicleType.SCHOOTER);
     }
 
     public void go() {
