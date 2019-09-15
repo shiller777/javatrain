@@ -15,29 +15,16 @@ public abstract class Vehicle implements Features {
     protected int miles;
     @Getter
     @Setter
-    protected VehicleType type;
-    @Getter
-    @Setter
-    protected int weight;
+    protected int basePrice;
 
-    public Vehicle(int producedYear, int miles, VehicleType type, int weight) {
+    public Vehicle(int producedYear, int miles, int basePrice) {
         this.producedYear = producedYear;
         this.miles = miles;
-        this.type = type;
-        this.weight = weight;
+        this.basePrice = basePrice;
     }
 
-
-    public Vehicle(int producedYear, int miles, VehicleType type) {
-        this(producedYear, miles, type, type.getInfo().getWeight());
-    }
-
-    public Vehicle(int producedYear, VehicleType type, int weight) {
-        this(producedYear, 0, type, weight);
-    }
-
-    public Vehicle(int producedYear, VehicleType type) {
-        this(producedYear, 0, type, type.getInfo().getWeight());
+    public Vehicle(int producedYear, int basePrice) {
+        this(producedYear, 0, basePrice);
     }
 
     public static Vehicle getObjectByType(VehicleType type){

@@ -5,7 +5,7 @@ import com.http.shiller.first.vehicles.Vehicle;
 public class SimpleCar extends Vehicle {
 
     public SimpleCar(int producedYear) {
-        super(producedYear, VehicleType.SIMPLE_CAR);
+        super(producedYear, 5000);
     }
 
     public void go() {
