@@ -16,15 +16,19 @@ public abstract class Vehicle implements Features {
     @Getter
     @Setter
     protected int basePrice;
+    @Getter
+    @Setter
+    protected int weight;
 
-    public Vehicle(int producedYear, int miles, int basePrice) {
+    public Vehicle(int producedYear, int miles, int basePrice, int weight) {
         this.producedYear = producedYear;
         this.miles = miles;
         this.basePrice = basePrice;
+        this.weight = weight;
     }
 
-    public Vehicle(int producedYear, int basePrice) {
-        this(producedYear, 0, basePrice);
+    public Vehicle(int producedYear, int basePrice, int weight) {
+        this(producedYear, 0, basePrice, weight);
     }
 
     public static Vehicle getObjectByType(VehicleType type){
@@ -32,6 +36,7 @@ public abstract class Vehicle implements Features {
     }
 
     public String toString() {
-        return "Vehicle {producedYear: " + this.producedYear + "; miles: " + this.miles + "; basePrice: " + this.basePrice + ";}";
+        return "Vehicle {producedYear: " + this.producedYear + "; miles: " + this.miles + "; basePrice: " +
+                this.basePrice + "; weight: " + this.weight + "}";
     }
 }
