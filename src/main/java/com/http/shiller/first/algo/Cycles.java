@@ -11,40 +11,39 @@ public class Cycles {
         int plusResult;
         int minusResult;
 
-        for (int i = 2; i < fibanachiArray.length; i++) {
 
-            boolean straightDirection = true;
+        int i = 2;
+        boolean straightDirection = true;
 
-            while (i < fibanachiArray.length) {
-                plusResult = fibanachiArray[i - 2] + fibanachiArray[i - 1];
-                minusResult = fibanachiArray[i - 1] - fibanachiArray[i - 2];
-                if (plusResult > 100 && minusResult < 0) {
-                    minusResult = fibanachiArray[i - 2] - fibanachiArray[i - 1];
-                }
-                if (straightDirection) {
-                    if (plusResult <= 100) {
-                        fibanachiArray[i] = plusResult;
-                        i++;
-                    } else {
-                        straightDirection = false;
-                        continue;
-                    }
-
+        while (i < fibanachiArray.length) {
+            plusResult = fibanachiArray[i - 2] + fibanachiArray[i - 1];
+            minusResult = fibanachiArray[i - 1] - fibanachiArray[i - 2];
+            if (plusResult > 100 && minusResult < 0) {
+                minusResult = fibanachiArray[i - 2] - fibanachiArray[i - 1];
+            }
+            if (straightDirection) {
+                if (plusResult <= 100) {
+                    fibanachiArray[i] = plusResult;
+                    i++;
                 } else {
-                    if (minusResult >= 0) {
-                        fibanachiArray[i] = minusResult;
-                        i++;
-                    } else {
-                        straightDirection = true;
-                        continue;
-                    }
+                    straightDirection = false;
+                    continue;
+                }
+
+            } else {
+                if (minusResult >= 0) {
+                    fibanachiArray[i] = minusResult;
+                    i++;
+                } else {
+                    straightDirection = true;
+                    continue;
                 }
             }
-
         }
 
-        for (int i = 0; i < fibanachiArray.length; i++) {
-            System.out.println("i = " + i + "fibanachi[" + i + "] = " + fibanachiArray[i]);
+
+        for (int ii = 0; ii < fibanachiArray.length; ii++) {
+            System.out.println("ii = " + ii + "fibanachi[" + ii + "] = " + fibanachiArray[ii]);
         }
 
     }
