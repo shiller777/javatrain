@@ -13,8 +13,8 @@ public class Main {
         System.out.println(VehicleUtil.calculatePrice(Vehicle.getObjectByType(VehicleType.BIKE)));
         System.out.println(VehicleUtil.calculatePrice(Vehicle.getObjectByType(VehicleType.SCHOOTER)));
 
-        Vehicle vehicle1 = new SimpleCar(2000, 1001, 4500);
-        Vehicle vehicle2 = new SimpleCar(1999, 10010, 4000);
+        Vehicle vehicle1 = new SimpleCar(2000, 1001, 4500, 5000);
+        Vehicle vehicle2 = new SimpleCar(1999, 10010, 4000, 5000);
 
         System.out.println(VehicleUtil.compare(vehicle1, vehicle2));
     }

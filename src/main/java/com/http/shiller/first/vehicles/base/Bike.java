@@ -4,16 +4,16 @@ import com.http.shiller.first.vehicles.Vehicle;
 
 public class Bike extends Vehicle {
 
-    public Bike(int producedYear, int miles, int basePrice) {
-        super(producedYear, miles, basePrice, VehicleType.BIKE.getInfo().getWeight());
+    public Bike(int producedYear, int miles, int basePrice, int weight) {
+        super(producedYear, miles, basePrice, weight);
     }
 
-    public Bike(int producedYear, int miles) {
-        super(producedYear, miles, 100, VehicleType.BIKE.getInfo().getWeight());
+    public Bike(int producedYear, int miles, int weight) {
+        super(producedYear, miles, 100, weight);
     }
 
-    public Bike(int producedYear) {
-        super(producedYear, 100, VehicleType.BIKE.getInfo().getWeight());
+    public Bike(int producedYear, int weight) {
+        super(producedYear, 100, weight);
     }
 
     public void go(int seconds) {

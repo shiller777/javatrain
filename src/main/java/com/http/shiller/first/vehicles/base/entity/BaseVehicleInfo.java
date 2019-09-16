@@ -7,13 +7,9 @@ import lombok.Setter;
 public class BaseVehicleInfo {
     @Getter
     @Setter
-    private int weight;
-    @Getter
-    @Setter
     private Vehicle classCar;
 
-    public BaseVehicleInfo(int weight, Vehicle classCar) {
-        this.weight = weight;
+    public BaseVehicleInfo(Vehicle classCar) {
         this.classCar = classCar;
     }
 }
