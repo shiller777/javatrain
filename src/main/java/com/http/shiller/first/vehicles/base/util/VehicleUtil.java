@@ -1,6 +1,7 @@
 package com.http.shiller.first.vehicles.base.util;
 
 import com.http.shiller.first.vehicles.Vehicle;
+import com.http.shiller.first.vehicles.base.exceptions.OutOfMaxCapacityException;
 
 public class VehicleUtil {
     public static double calculatePrice(Vehicle vehicle) {
@@ -31,6 +32,22 @@ public class VehicleUtil {
                 return vehicle2;
             }
         }
+    }
+
+    public static Vehicle compareSpeed(int seconds, int miles, Vehicle... vehicles) {
+        double max = Double.MIN_VALUE;
+        int maxNum = 0;
+        for (int i = 0; i < vehicles.length; i++) {
+            try {
+                if (vehicles[i].go(seconds, miles) > max) {
+                    max = vehicles[i].go(seconds, miles);
+                    maxNum = i;
+                }
+            } catch (OutOfMaxCapacityException e) {
+                e.printStackTrace();
+            }
+        }
+        return vehicles[maxNum];
     }
 
 }

@@ -1,22 +1,30 @@
 package com.http.shiller.first.vehicles.base;
 
 import com.http.shiller.first.vehicles.Vehicle;
+import com.http.shiller.first.vehicles.base.entity.Engine;
+import com.http.shiller.first.vehicles.base.exceptions.OutOfMaxCapacityException;
 
 public class Motobike extends Vehicle {
 
-    public Motobike(int producedYear, int miles, int basePrice, int weight) {
-        super(producedYear, miles, basePrice, weight);
+    public Motobike(int producedYear, int miles, int basePrice, int weight, Engine engine) {
+        super(producedYear, miles, basePrice, weight, engine);
     }
 
-    public Motobike(int producedYear, int miles, int weight) {
-        super(producedYear, miles, 2000, weight);
+    public Motobike(int producedYear, int miles, int weight, Engine engine) {
+        super(producedYear, miles, 2000, weight, engine);
     }
 
-    public Motobike(int producedYear, int weight) {
-        super(producedYear, 2000, weight);
+    public Motobike(int producedYear, int weight, Engine engine) {
+        super(producedYear, 2000, weight, engine);
     }
 
-    public void go(int seconds) {
+    public double go(int seconds, int miles) throws OutOfMaxCapacityException {
+        if (this.miles > getEngine().getMaxCapacity()) {
+            throw new OutOfMaxCapacityException();
+        }
+        //System.out.println("Average speed: " + miles / seconds);
+        this.miles += miles;
+        return miles / seconds;
     }
 
     public void stop() {
