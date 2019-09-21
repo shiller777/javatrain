@@ -7,6 +7,7 @@ import com.http.shiller.first.vehicles.base.exceptions.OutOfMaxDistanceException
 import com.http.shiller.first.vehicles.base.util.VehicleUtil;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Main {
@@ -61,6 +62,8 @@ public class Main {
 
         System.out.println(VehicleUtil.compareDistance(10, vehicle1, vehicle2, vehicle3));
 
+        System.out.println("==========================================");
+
 
         List<Vehicle> vehicles = new ArrayList<>();
         vehicles.add(vehicle1);
@@ -76,5 +79,37 @@ public class Main {
         vehicles.sort(new VehiclesComparator().thenComparing(new VehiclesPriceComparator()));
 
         vehicles.forEach(System.out::println);
+
+        System.out.println("==========================================");
+
+
+        List<Vehicle> vehicles2 = new ArrayList<>();
+        vehicles2.add(vehicle1);
+        vehicles2.add(vehicle2);
+        vehicles2.add(vehicle3);
+        vehicles2.add(vehicle4);
+        vehicles2.add(vehicle5);
+        vehicles2.add(vehicle6);
+        vehicles2.add(vehicle7);
+        vehicles2.add(vehicle8);
+        vehicles2.add(vehicle9);
+        vehicles2.add(vehicle10);
+
+        vehicles2.sort(new Comparator<Vehicle>() {
+            @Override
+            public int compare(Vehicle vehicle1, Vehicle vehicle2) {
+                if (vehicle1.getMiles() > vehicle2.getMiles()) {
+                    return 1;
+                } else {
+                    if (vehicle1.getMiles() == vehicle2.getMiles()) {
+                        return 0;
+                    } else {
+                        return -1;
+                    }
+                }
+            }
+        });
+
+        vehicles2.forEach(System.out::println);
     }
 }
