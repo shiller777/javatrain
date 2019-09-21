@@ -3,11 +3,12 @@ package com.http.shiller.first.vehicles;
 import com.http.shiller.first.vehicles.base.Features;
 import com.http.shiller.first.vehicles.base.VehicleType;
 import com.http.shiller.first.vehicles.base.entity.Engine;
+import com.http.shiller.first.vehicles.base.exceptions.OutOfMaxDistanceException;
 import lombok.Getter;
 import lombok.Setter;
 
 
-public abstract class Vehicle implements Features {
+public abstract class Vehicle implements Features, Comparable<Vehicle> {
     @Getter
     @Setter
     protected int producedYear;
@@ -40,8 +41,38 @@ public abstract class Vehicle implements Features {
         return type.getInfo().getClassCar();
     }
 
+    public int go(int seconds) throws OutOfMaxDistanceException {
+        int distance = seconds * seconds * this.engine.getAcceleration();
+        if (distance > getEngine().getMaxDistance()) {
+            throw new OutOfMaxDistanceException("engine distance is not enough");
+        }
+        this.miles += distance;
+        return distance;
+    }
+
     public String toString() {
-        return "Vehicle {producedYear: " + this.producedYear + "; miles: " + this.miles + "; basePrice: " +
+        return "Vehicle [%s] {producedYear: " + this.producedYear + "; miles: " + this.miles + "; basePrice: " +
                 this.basePrice + "; weight: " + this.weight + "; " + this.engine.toString() + "}";
+    }
+
+    @Override
+    public int compareTo(Vehicle o) {
+        int years = this.getProducedYear() - o.getProducedYear();
+        if (years > -3 && years < 3) {
+            if (this.getMiles() < o.getMiles()) {
+                return 1;
+            } else {
+                if (this.getMiles() == o.getMiles()) {
+                    return 0;
+                }
+                return -1;
+            }
+        } else {
+            if (years > 0) {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
     }
 }

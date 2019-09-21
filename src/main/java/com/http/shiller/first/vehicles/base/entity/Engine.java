@@ -3,35 +3,47 @@ package com.http.shiller.first.vehicles.base.entity;
 public class Engine {
 
     private int power;
-    private int maxCapacity;
+    private int maxDistance;
+    private int acceleration;
 
     public Engine() {
         this.power = 100;
-        this.maxCapacity = 500000;
+        this.maxDistance = 500000;
+        this.acceleration = 5;
     }
 
-    public Engine(int power, int maxCapacity) {
+    public Engine(int power, int maxDistance, int acceleration) {
         this.power = power;
-        this.maxCapacity = maxCapacity;
+        this.maxDistance = maxDistance;
+        this.acceleration = acceleration;
     }
 
     public int getPower() {
         return power;
     }
 
-    public int getMaxCapacity() {
-        return maxCapacity;
+    public int getMaxDistance() {
+        return maxDistance;
+    }
+
+    public int getAcceleration() {
+        return acceleration;
     }
 
     public void setPower(int power) {
         this.power = power;
     }
 
-    public void setMaxCapacity(int maxCapacity) {
-        this.maxCapacity = maxCapacity;
+    public void setMaxDistance(int maxDistance) {
+        this.maxDistance = maxDistance;
+    }
+
+    public void setAcceleration(int acceleration) {
+        this.acceleration = acceleration;
     }
 
     public String toString() {
-        return "Engine: {power: " + this.power + "; maxCapacity: " + this.maxCapacity + "}";
+        return String.format("Engine: {power: %s; maxDistance: %s; acceleration: %s}",
+                this.power, this.maxDistance, this.acceleration);
     }
 }

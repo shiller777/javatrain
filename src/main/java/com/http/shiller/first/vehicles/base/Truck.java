@@ -2,7 +2,7 @@ package com.http.shiller.first.vehicles.base;
 
 import com.http.shiller.first.vehicles.Vehicle;
 import com.http.shiller.first.vehicles.base.entity.Engine;
-import com.http.shiller.first.vehicles.base.exceptions.OutOfMaxCapacityException;
+import com.http.shiller.first.vehicles.base.exceptions.OutOfMaxDistanceException;
 
 public class Truck extends Vehicle {
 
@@ -18,13 +18,9 @@ public class Truck extends Vehicle {
         super(producedYear, 20000, weight, engine);
     }
 
-    public double go(int seconds, int miles) throws OutOfMaxCapacityException {
-        if (this.miles > getEngine().getMaxCapacity()) {
-            throw new OutOfMaxCapacityException();
-        }
-        //System.out.println("Average speed: " + miles / seconds);
-        this.miles += miles;
-        return miles / seconds;
+    @Override
+    public String toString() {
+        return String.format(super.toString(), "Truck");
     }
 
     public void stop() {

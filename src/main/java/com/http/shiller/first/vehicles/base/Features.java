@@ -1,9 +1,9 @@
 package com.http.shiller.first.vehicles.base;
 
-import com.http.shiller.first.vehicles.base.exceptions.OutOfMaxCapacityException;
+import com.http.shiller.first.vehicles.base.exceptions.OutOfMaxDistanceException;
 
 public interface Features {
-    double go(int seconds, int miles) throws OutOfMaxCapacityException;
+    int go(int seconds) throws OutOfMaxDistanceException;
 
     void stop();
 }
