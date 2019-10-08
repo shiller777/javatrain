@@ -8,30 +8,35 @@ public class ShillerDate implements Comparable<ShillerDate> {
     int monthNumber;
     int yearNumber;
 
+    public enum WeekDays{
+        MONDAY,
+        TUESDAY,
+        WEDNESDAY,
+        THURSDAY,
+        FRIDAY,
+        SATURDAY,
+        SUNDAY;
+    }
+
     public ShillerDate(int dayNumber, int monthNumber, int yearNumber) throws Exception {
         int[] daysInMonths = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
         if (yearNumber < 1) {
-            //todo exception
             throw new Exception(String.format("Incorrect date: %d-%d-%d", yearNumber, monthNumber, dayNumber));
         }
         if (monthNumber > 12 || monthNumber < 1) {
-            //todo exception
             throw new Exception(String.format("Incorrect date: %d-%d-%d", yearNumber, monthNumber, dayNumber));
         }
         if (dayNumber < 1) {
-            //todo exception
             throw new Exception(String.format("Incorrect date: %d-%d-%d", yearNumber, monthNumber, dayNumber));
         }
         if (monthNumber == 2) {
             boolean isLeap = ((yearNumber % 4 == 0) && (yearNumber % 100 != 0)) || (yearNumber % 400 == 0);
             if (dayNumber > daysInMonths[monthNumber - 1] + (isLeap ? 1 : 0)) {
-                //todo exception
                 throw new Exception(String.format("Incorrect date: %d-%d-%d", yearNumber, monthNumber, dayNumber));
             }
         }
         if (dayNumber > daysInMonths[monthNumber - 1]) {
-            //todo exception
             throw new Exception(String.format("Incorrect date: %d-%d-%d", yearNumber, monthNumber, dayNumber));
         }
 
@@ -84,14 +89,14 @@ public class ShillerDate implements Comparable<ShillerDate> {
             removeDays(-1 * days);
         }
 
-        int ladays = days;
+        int daysLeft = days;
 
 
-        int lalala = ladays - daysTillEndOfMonth();
+        int deltaDays = daysLeft - daysTillEndOfMonth();
 
 
 
-        while (lalala > 0) {
+        while (deltaDays > 0) {
             if (this.monthNumber == 12) {
                 this.yearNumber++;
                 this.monthNumber = 1;
@@ -99,17 +104,40 @@ public class ShillerDate implements Comparable<ShillerDate> {
                 this.monthNumber++;
             }
             this.dayNumber = 1;
-            ladays = lalala;
-            lalala = ladays - daysTillEndOfMonth() - 1;
+            daysLeft = deltaDays;
+            deltaDays = daysLeft - daysTillEndOfMonth() - 1;
         }
 
-        if (lalala <= 0) {
-            this.dayNumber += ladays - 1;
+        if (deltaDays <= 0) {
+            this.dayNumber += daysLeft - 1;
         }
     }
 
     public void removeDays(int days) {
 
+        if (days < 0) {
+            addDays(-1 * days);
+        }
+
+        int daysLeft = days;
+
+        int deltaDays = daysLeft - daysFromBeginOfMonth();
+
+        while (deltaDays > 0) {
+            if (this.monthNumber == 1) {
+                this.yearNumber--;
+                this.monthNumber = 12;
+            } else {
+                this.monthNumber--;
+            }
+            this.dayNumber = daysCountInMonth();
+            daysLeft = deltaDays;
+            deltaDays = daysLeft - daysFromBeginOfMonth();
+        }
+
+        if (deltaDays <= 0) {
+            this.dayNumber -= daysLeft;
+        }
     }
 
     public int daysToDate(ShillerDate date) throws Exception {
@@ -129,9 +157,6 @@ public class ShillerDate implements Comparable<ShillerDate> {
             date2 = new ShillerDate(date.dayNumber, date.monthNumber, date.yearNumber);
         }
 
-        System.out.println("date1: " + date1);
-        System.out.println("date2: " + date2);
-
         int resultDays = 0;
         if (date1.yearNumber == date2.yearNumber) {
             //same year
@@ -146,9 +171,6 @@ public class ShillerDate implements Comparable<ShillerDate> {
                     resultDays += new ShillerDate(1, i, date2.yearNumber).daysCountInMonth();
                 }
             }
-
-
-
 
         } else {
             resultDays += date1.daysTillEndOfYear();
@@ -195,13 +217,25 @@ public class ShillerDate implements Comparable<ShillerDate> {
 
     public int dayOfWeek() throws Exception {
         int offset = daysToDate(new ShillerDate(1,1,2018));
-        int lalala = offset % 7;
-        lalala *= -1;
-        System.out.println("lalala: " + lalala);
-        if (lalala >= 0) {
-            return 1 + lalala;
+        int nonFullWeekDays = -1 * (offset % 7);
+        if (nonFullWeekDays >= 0) {
+            return 1 + nonFullWeekDays;
         } else {
-            return 8 + lalala;
+            return 8 + nonFullWeekDays;
+        }
+    }
+
+    public String dayOfWeekHuman() throws Exception {
+        int result = dayOfWeek();
+        switch(result) {
+            case 1: return WeekDays.MONDAY.name();
+            case 2: return WeekDays.TUESDAY.name();
+            case 3: return WeekDays.WEDNESDAY.name();
+            case 4: return WeekDays.THURSDAY.name();
+            case 5: return WeekDays.FRIDAY.name();
+            case 6: return WeekDays.SATURDAY.name();
+            case 7: return WeekDays.SUNDAY.name();
+            default: return "Oops... UFO came and left this here...";
         }
     }
 
