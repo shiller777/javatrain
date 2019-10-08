@@ -4,11 +4,11 @@ public class ShillerDate implements Comparable<ShillerDate> {
 
     //01.01.2018 - Monday
 
-    int dayNumber;
-    int monthNumber;
-    int yearNumber;
+    private int dayNumber;
+    private int monthNumber;
+    private int yearNumber;
 
-    public enum WeekDays{
+    private enum WeekDays{
         MONDAY,
         TUESDAY,
         WEDNESDAY,
