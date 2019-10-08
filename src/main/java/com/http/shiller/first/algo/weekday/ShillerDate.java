@@ -235,7 +235,7 @@ public class ShillerDate implements Comparable<ShillerDate> {
             case 5: return WeekDays.FRIDAY.name();
             case 6: return WeekDays.SATURDAY.name();
             case 7: return WeekDays.SUNDAY.name();
-            default: return "Oops... UFO came and left this here...";
+            default: return "Oops... UFO came and left this here..." + " (" + result + ")";
         }
     }
 
