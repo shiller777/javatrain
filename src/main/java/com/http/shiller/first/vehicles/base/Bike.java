@@ -6,6 +6,10 @@ import com.http.shiller.first.vehicles.base.exceptions.OutOfMaxDistanceException
 
 public class Bike extends Vehicle {
 
+    public Bike(int price) {
+        super(2000, 200, price, 200, new Engine(200, 200, 200));
+    }
+
     public Bike(int producedYear, int miles, int basePrice, int weight, Engine engine) {
         super(producedYear, miles, basePrice, weight, engine);
     }
