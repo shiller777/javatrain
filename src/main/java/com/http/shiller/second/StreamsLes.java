@@ -57,12 +57,19 @@ public class StreamsLes {
         Comparator<Vehicle> comparator = Vehicle::compareTo;
         Collections.sort(vehicleList, comparator);
 
-        vehicleList.stream()
-                .filter((veh) -> veh.getBasePrice() > 200)
-                .map(Vehicle::getWeight)
-                .findFirst()
-                .orElseThrow(() -> {
-                    throw new RuntimeException();
-                });
+        try {
+            /*
+            vehicleList.stream()
+                    .filter((veh) -> veh.getBasePrice() > 200)
+                    .map(Vehicle::getWeight)
+                    .findFirst()
+                    .orElseThrow(() -> {
+                        throw new RuntimeException();
+                    });
+            */
+        } catch (Exception e) {
+
+        }
+
     }
 }
