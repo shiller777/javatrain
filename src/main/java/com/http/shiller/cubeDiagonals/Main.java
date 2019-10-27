@@ -2,10 +2,18 @@ package com.http.shiller.cubeDiagonals;
 
 public class Main {
     public static void main(String[] args) {
-        printDiag1(9);
-        printDiag2(9);
-        printDiag3(9);
-        printDiag4(9);
+
+//        printDiag1(9);
+//        printDiag2(9);
+//        printDiag3(9);
+//        printDiag4(9);
+    }
+
+
+    private static void printOppositePoints(int cubeSide, Point point) {
+//        point.x;
+//        point.y;
+//        point.z;
     }
 
     public static void printDiag1(int cubeSide) {
