@@ -1,7 +1,6 @@
 package com.http.shiller.cars;
 
-class Car
-{
+class Car {
     public void drive() throws Exception {
         Engine engine = new Engine();
 
