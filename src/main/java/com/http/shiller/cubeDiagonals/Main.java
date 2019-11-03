@@ -1,6 +1,7 @@
 package com.http.shiller.cubeDiagonals;
 
 import com.http.shiller.logger.BaseLogger;
+import com.http.shiller.logger.GodzillaLogger;
 import com.http.shiller.logger.Logger;
 import com.http.shiller.logger.MonsterLogger;
 
@@ -8,6 +9,7 @@ public class Main {
     private static Logger logger = new BaseLogger();
     private static Logger logger2 = new MonsterLogger();
     private static Logger logger3 = new MonsterLogger(true, "C:\\Test\\lalala.txt", "C:\\Test\\ololol.txt");
+    private static Logger logger4 = new GodzillaLogger(true, "C:\\Test\\lalala.txt", "C:\\Test\\ololol.txt");
     public static void main(String[] args) {
 
 //        printDiag1(9);
@@ -22,7 +24,9 @@ public class Main {
         logger.warn("shitcode detected!");
         logger2.info("ololol");
         logger3.warn("doesn't work");
+        logger4.warn("doesn't work");
         logger3.info("now works!");
+        logger4.info("now works!");
         for (int i = 1; i <= cubeSide; i += (cubeSide - 1)) {
             for (int j = 1; j <= cubeSide; j += (cubeSide - 1)) {
                 for (int k = 1; k <= cubeSide; k += (cubeSide - 1)) {

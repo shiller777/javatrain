@@ -9,9 +9,6 @@ import java.util.List;
 public class MonsterLogger extends AbstractLogger {
 
     private List<OutputStream> streamsToLog = new ArrayList<>();
-    {
-        streamsToLog.add(System.out);
-    }
 
     public void addOutputStream(OutputStream outputStream) {
         streamsToLog.add(outputStream);
@@ -39,23 +36,14 @@ public class MonsterLogger extends AbstractLogger {
     }
 
     public MonsterLogger() {
-        ;
+        System.out.println("Monster logger init");
+        streamsToLog.add(System.out);
     }
 
     public MonsterLogger(boolean append, String... filePaths) {
+        System.out.println("Monster logger init");
+        streamsToLog.add(System.out);
         List<String> filePathsList = Arrays.asList(filePaths);
-
-//        filePathsList.forEach(o -> {
-//            if (new File(o).exists()) {
-//                try {
-//                    streamsToLog.add(new FileOutputStream(o));
-//                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                }
-//            } else {
-//                throw new RuntimeException(String.format("File '%s' doesn't exist", o));
-//            }
-//        });
 
         filePathsList.forEach(o -> {
             try {
