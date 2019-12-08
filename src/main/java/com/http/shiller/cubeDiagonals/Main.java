@@ -7,26 +7,40 @@ import com.http.shiller.logger.MonsterLogger;
 
 public class Main {
     private static Logger logger = new BaseLogger();
-    private static Logger logger2 = new MonsterLogger();
-    private static Logger logger3 = new MonsterLogger(true, "C:\\Test\\lalala.txt", "C:\\Test\\ololol.txt");
-    private static Logger logger4 = new GodzillaLogger(true, "C:\\Test\\lalala.txt", "C:\\Test\\ololol.txt");
+//    private static Logger logger2 = new MonsterLogger();
+//    private static Logger logger3 = new MonsterLogger(true, "C:\\Test\\lalala.txt", "C:\\Test\\ololol.txt");
+    //private static Logger logger4 = new GodzillaLogger(true, "C:\\Test\\lalala.txt", "C:\\Test\\ololol.txt");
+    private static GodzillaLogger loggerGodzilla = new GodzillaLogger();
+
     public static void main(String[] args) {
 
 //        printDiag1(9);
 //        printDiag2(9);
 //        printDiag3(9);
 //        printDiag4(9);
+
+        loggerGodzilla.addPrintFile("C:\\Test\\ololol.txt", true, true, 300);
+
         printOppositePoints(9, new Point(9, 9, 9));
+
     }
 
 
     private static void printOppositePoints(int cubeSide, Point point) {
-        logger.warn("shitcode detected!");
-        logger2.info("ololol");
-        logger3.warn("doesn't work");
-        logger4.warn("doesn't work");
-        logger3.info("now works!");
-        logger4.info("now works!");
+//        logger.warn("shitcode detected!");
+//        logger2.info("ololol");
+//        logger3.warn("doesn't work");
+//        logger4.warn("doesn't work");
+//        logger3.info("now works!");
+        loggerGodzilla.info("now works!");
+        loggerGodzilla.info("asdf");
+        loggerGodzilla.info("qwerty");
+        loggerGodzilla.info("zxcv");
+        loggerGodzilla.info("asdf");
+        loggerGodzilla.info("qwerty");
+        loggerGodzilla.info("zxcv");
+        loggerGodzilla.checkAndArchieve();
+
         for (int i = 1; i <= cubeSide; i += (cubeSide - 1)) {
             for (int j = 1; j <= cubeSide; j += (cubeSide - 1)) {
                 for (int k = 1; k <= cubeSide; k += (cubeSide - 1)) {

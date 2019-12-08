@@ -10,31 +10,6 @@ public class MonsterLogger extends AbstractLogger {
 
     private List<OutputStream> streamsToLog = new ArrayList<>();
 
-    public void addOutputStream(OutputStream outputStream) {
-        streamsToLog.add(outputStream);
-    }
-    public void addPrintFile(String filePath, boolean append) {
-        try {
-            boolean fileOk = true;
-            if (!new File(filePath).exists()) {
-                fileOk = new File(filePath).createNewFile();
-            }
-            if (!fileOk) {
-                throw new RuntimeException(String.format("Cannot create file '%s'", filePath));
-            }
-            //@Cleanup
-            FileOutputStream fileStream = new FileOutputStream(filePath, append);
-            streamsToLog.add(fileStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException(String.format("File '%s' doesn't exist", filePath));
-        }
-    }
-    public void clearOutputStreamList() {
-        streamsToLog = new ArrayList<>();
-        streamsToLog.add(System.out);
-    }
-
     public MonsterLogger() {
         System.out.println("Monster logger init");
         streamsToLog.add(System.out);
@@ -54,7 +29,6 @@ public class MonsterLogger extends AbstractLogger {
                 if (!fileOk) {
                     throw new RuntimeException(String.format("Cannot create file '%s'", o));
                 }
-                //@Cleanup
                 FileOutputStream fileStream = new FileOutputStream(o, append);
                 streamsToLog.add(fileStream);
             } catch (IOException e) {
@@ -64,6 +38,32 @@ public class MonsterLogger extends AbstractLogger {
         });
     }
 
+
+
+
+    public void addOutputStream(OutputStream outputStream) {
+        streamsToLog.add(outputStream);
+    }
+    public void addPrintFile(String filePath, boolean append) {
+        try {
+            boolean fileOk = true;
+            if (!new File(filePath).exists()) {
+                fileOk = new File(filePath).createNewFile();
+            }
+            if (!fileOk) {
+                throw new RuntimeException(String.format("Cannot create file '%s'", filePath));
+            }
+            FileOutputStream fileStream = new FileOutputStream(filePath, append);
+            streamsToLog.add(fileStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(String.format("File '%s' doesn't exist", filePath));
+        }
+    }
+    public void clearOutputStreamList() {
+        streamsToLog = new ArrayList<>();
+        streamsToLog.add(System.out);
+    }
 
 
     @Override

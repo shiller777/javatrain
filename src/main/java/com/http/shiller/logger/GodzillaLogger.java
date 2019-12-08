@@ -1,6 +1,5 @@
 package com.http.shiller.logger;
 
-import lombok.Cleanup;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,9 +7,12 @@ import java.io.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
-public class GodzillaLogger extends AbstractLogger {
+public class GodzillaLogger extends MonsterLogger {
 
     class StreamSource {
         @Getter
@@ -80,59 +82,11 @@ public class GodzillaLogger extends AbstractLogger {
     private List<StreamSource> streamsToLog = new ArrayList<>();
 
 
-    public void addOutputStream(PrintStream outputStream) {
-        streamsToLog.add(new StreamSource(outputStream));
-    }
-    public void addPrintFile(String filePath, boolean append) {
-        try {
-            boolean fileOk = true;
-            if (!new File(filePath).exists()) {
-                fileOk = new File(filePath).createNewFile();
-            }
-            if (!fileOk) {
-                throw new RuntimeException(String.format("Cannot create file '%s'", filePath));
-            }
-            //@Cleanup
-            FileOutputStream fileStream = new FileOutputStream(filePath, append);
-            streamsToLog.add(new StreamSource(fileStream, new FileStreamParams(filePath, append)));
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException(String.format("File '%s' doesn't exist", filePath));
-        }
-    }
-
-    public void addOutputStream(FileOutputStream outputStream, FileStreamParams fileStreamParams) {
-        streamsToLog.add(new StreamSource(outputStream, fileStreamParams));
-    }
-
-
-
-
-
-
-
-    public void clearOutputStreamList() {
-        streamsToLog = new ArrayList<>();
-        streamsToLog.add(new StreamSource(System.out));
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public GodzillaLogger() {
         System.out.println("Godzilla logger init");
         streamsToLog.add(new StreamSource(System.out));
     }
+
 
     public GodzillaLogger(boolean append, String... filePaths) {
         System.out.println("Godzilla logger init");
@@ -148,7 +102,7 @@ public class GodzillaLogger extends AbstractLogger {
                 if (!fileOk) {
                     throw new RuntimeException(String.format("Cannot create file '%s'", o));
                 }
-                @Cleanup
+
                 FileOutputStream fileStream = new FileOutputStream(o, append);
                 streamsToLog.add(new StreamSource(fileStream, new FileStreamParams(o, append)));
             } catch (IOException e) {
@@ -158,11 +112,88 @@ public class GodzillaLogger extends AbstractLogger {
         });
     }
 
+    public void addOutputStream(PrintStream outputStream) {
+        streamsToLog.add(new StreamSource(outputStream));
+    }
+    public void addPrintFile(String filePath, boolean append) {
+        FileStreamParams fileStreamParams = new FileStreamParams(filePath, append);
+        addPrintFile(fileStreamParams);
+        /*
+        try {
+            boolean fileOk = true;
+            if (!new File(filePath).exists()) {
+                fileOk = new File(filePath).createNewFile();
+            }
+            if (!fileOk) {
+                throw new RuntimeException(String.format("Cannot create file '%s'", filePath));
+            }
+
+            FileOutputStream fileStream = new FileOutputStream(filePath, append);
+            streamsToLog.add(new StreamSource(fileStream, new FileStreamParams(filePath, append)));
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(String.format("File '%s' doesn't exist", filePath));
+        }
+        */
+    }
+    public void addPrintFile(String filePath, boolean append, boolean archieve, long maxLogSize) {
+        FileStreamParams fileStreamParams = new FileStreamParams(filePath, append, archieve, maxLogSize);
+        addPrintFile(fileStreamParams);
+        /*
+        try {
+            boolean fileOk = true;
+            if (!new File(filePath).exists()) {
+                fileOk = new File(filePath).createNewFile();
+            }
+            if (!fileOk) {
+                throw new RuntimeException(String.format("Cannot create file '%s'", filePath));
+            }
+
+            FileOutputStream fileStream = new FileOutputStream(filePath, append);
+            streamsToLog.add(new StreamSource(fileStream, new FileStreamParams(filePath, append, archieve, maxLogSize)));
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(String.format("File '%s' doesn't exist", filePath));
+        }
+        */
+    }
+    private void addPrintFile(FileStreamParams fileStreamParams) {
+        try {
+            boolean fileOk = true;
+            if (!new File(fileStreamParams.getFilePath()).exists()) {
+                fileOk = new File(fileStreamParams.getFilePath()).createNewFile();
+            }
+            if (!fileOk) {
+                throw new RuntimeException(String.format("Cannot create file '%s'", fileStreamParams.getFilePath()));
+            }
+
+            FileOutputStream fileStream = new FileOutputStream(fileStreamParams.getFilePath(), fileStreamParams.isAppend());
+            streamsToLog.add(new StreamSource(fileStream,
+                    new FileStreamParams(fileStreamParams.getFilePath(), fileStreamParams.isAppend(),
+                            fileStreamParams.isArchieve(), fileStreamParams.getMaxLogSize())));
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(String.format("File '%s' doesn't exist", fileStreamParams.getFilePath()));
+        }
+    }
 
 
 
 
 
+
+
+
+
+
+    public void addOutputStream(FileOutputStream outputStream, FileStreamParams fileStreamParams) {
+        streamsToLog.add(new StreamSource(outputStream, fileStreamParams));
+    }
+
+    public void clearOutputStreamList() {
+        streamsToLog = new ArrayList<>();
+        streamsToLog.add(new StreamSource(System.out));
+    }
 
     @Override
     protected void log(LogTypes type, String message) {
@@ -175,56 +206,130 @@ public class GodzillaLogger extends AbstractLogger {
                 .append(message);
 
         for (StreamSource o : streamsToLog) {
-            System.out.println(o);
-
-            try {
-                if (o.getOutputStream() == null) {
-                    System.out.println(o.getOutputStream());
-                    o.setOutputStream(new FileOutputStream(o.getFileParams().getFilePath(), true));
-                    System.out.println(o.getOutputStream());
-                }
-            } catch(java.io.IOException e) {
-                System.out.println("Hmm...some shit hpnd...");
-            }
-
-
             if (o.getOutputStream() instanceof PrintStream) {
                 PrintStream printStream = (PrintStream)o.getOutputStream();
                 printStream.println(builder.toString());
             } else {
-                if (o.getOutputStream() instanceof FileOutputStream) {
+                if(o.getOutputStream() instanceof FileOutputStream) {
                     try {
-
-                        if (o.getOutputStream() == null) {
-                            o.setOutputStream(new FileOutputStream(o.getFileParams().getFilePath(), true));
-                        }
-                        try {
-                            if (o.getOutputStream() == null) {
-                                System.out.println(o.getOutputStream());
-                                o.getOutputStream().close();
-                                o.setOutputStream(new FileOutputStream(o.getFileParams().getFilePath(), true));
-                                System.out.println(o.getOutputStream());
-                            }
-                        } catch(java.io.IOException e) {
-                            System.out.println("Hmm...some shit hpnd...");
-                        }
-
-
-
                         byte b[] = builder.toString().getBytes();
                         byte end[] = "\n".getBytes();
                         o.getOutputStream().write(b);
                         o.getOutputStream().write(end);
-                        o.getOutputStream().close();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
                 } else {
                     throw new RuntimeException(
-                            String.format("Only PrintStream is supported for now but not '%s'", o.getClass()));
+                            String.format("Only PrintStream is supported for now but not '%s'",
+                                    o.getOutputStream().getClass()));
                 }
             }
         }
     }
+
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+
+    public void checkAndArchieve() {
+        for (StreamSource o : streamsToLog) {
+            if(o.getOutputStream() instanceof FileOutputStream) {
+                // close
+                if (o.getFileParams().isArchieve()) {
+                    try {
+                        o.getOutputStream().close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                // check
+                File file = new File(o.getFileParams().getFilePath());
+                long fileSize = file.length();
+
+                // archieve if necessary
+                boolean needAppend = o.getFileParams().append;
+
+                if (fileSize > o.getFileParams().getMaxLogSize()) {
+                    needAppend = false;
+                    // arc here
+                    archieve(o.getFileParams().getFilePath());
+                }
+                // open
+                try {
+                    o.setOutputStream(new FileOutputStream(o.getFileParams().getFilePath(), needAppend));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                    throw new RuntimeException(String.format("File '%s' doesn't exist", o.getFileParams().getFilePath()));
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+
+
+    public void archieve(String filePath) {
+
+        String sourceFile = filePath;
+
+        int beginExt = filePath.lastIndexOf(".");
+        String filePathWithoutExt = filePath.substring(0, beginExt);
+
+        Date now = new Date();
+        Timestamp lalala = new Timestamp(now.getTime());
+
+        String zipPath = (filePathWithoutExt + "_"
+                + lalala.toString().replace(":", "_")
+                + ".zip")
+                .replace(" ", "_");
+
+        try {
+            FileOutputStream fos = null;
+
+            File zipFile = new File(zipPath);
+            if (!zipFile.exists()) {
+                zipFile.createNewFile();
+            }
+
+            fos = new FileOutputStream(zipPath);
+            ZipOutputStream zipOut = new ZipOutputStream(fos);
+            File fileToZip = new File(sourceFile);
+            FileInputStream fis = new FileInputStream(fileToZip);
+            ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
+            zipOut.putNextEntry(zipEntry);
+            byte[] bytes = new byte[1024];
+            int length;
+            while((length = fis.read(bytes)) >= 0) {
+                zipOut.write(bytes, 0, length);
+            }
+            zipOut.close();
+            fis.close();
+            fos.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
